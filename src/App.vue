@@ -4,7 +4,7 @@
       <p class="logo">tp</p>
       <h1>Task Pilot</h1>
     </header>
-    <form @submit.prevent="addTodo" class="add-todo">
+    <form @submit.prevent="addTodo" class="todo-form">
       <h2 v-if="!hasTodos">Add a list of Todos</h2>
       <h2 v-else>Beat procrastination, get started now!</h2>
       <input
@@ -16,10 +16,18 @@
       <button class="add-btn" :disabled="isNewTodoEmpty">Add Todo</button>
     </form>
     <ul class="todo-list">
+      <button class="delete-all-btn" v-if="hasTodos" @click="deleteAllTodos">
+        Delete All
+      </button>
       <li v-for="(todo, index) in activeTodos" :key="index" class="todo-item">
-        <button @click="toggleTodoStatus(todo)">
-          <ph-circle v-if="!todo.isCompleted" :size="16" color="#f98525" />
-          <ph-check v-else :size="16" color="#f98525" />
+        <button class="checkbox-btn" @click="toggleTodoStatus(todo)">
+          <ph-radio-button
+            v-if="!todo.isCompleted"
+            :size="16"
+            color="#f98525"
+            weight="bold"
+          />
+          <ph-check v-else :size="16" color="#f98525" weight="bold" />
         </button>
         <div class="todo">
           <p
@@ -38,15 +46,19 @@
             @keyup.enter="updateTodo(todo)"
           />
         </div>
-        <button class="edit-btn" @click="toggleEdit(todo)">
+        <button
+          v-if="!todo.isCompleted"
+          class="edit-btn"
+          @click="toggleEdit(todo)"
+        >
           <ph-pencil-simple-line
-            v-if="!todo.isEditing"
+            v-if="!todo.isEditing && !todo.isCompleted"
             :size="16"
             color="#f98525"
           />
-          <ph-file-plus v-else :size="16" color="#f98525" />
+          <ph-file-plus v-else-if="todo.isEditing" :size="16" color="#f98525" />
         </button>
-        <button class="delete-btn" @click="removeTodo(todo)">
+        <button class="delete-btn" @click="deleteTodo(todo)">
           <ph-trash :size="16" color="red" />
         </button>
       </li>
@@ -97,8 +109,11 @@ export default {
         this.newTodo = "";
       }
     },
-    removeTodo(todo) {
+    deleteTodo(todo) {
       todo.deleted = true;
+    },
+    deleteAllTodos() {
+      this.todos = [];
     },
     toggleTodoStatus(todo) {
       todo.isCompleted = !todo.isCompleted;
@@ -120,8 +135,7 @@ export default {
 
 <script setup>
 import {
-  PhPaperPlaneTilt,
-  PhCircle,
+  PhRadioButton,
   PhCheck,
   PhPencilSimpleLine,
   PhFilePlus,
