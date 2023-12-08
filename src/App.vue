@@ -1,13 +1,18 @@
 <template>
   <div class="todo-app">
-    <div class="title">
+    <header>
+      <p class="logo">tp</p>
       <h1>Task Pilot</h1>
-      <ph-paper-plane-tilt :size="80" color="#fff" />
-    </div>
+    </header>
     <form @submit.prevent="addTodo" class="add-todo">
       <h2 v-if="!hasTodos">Add a list of Todos</h2>
       <h2 v-else>Beat procrastination, get started now!</h2>
-      <input type="text" v-model="newTodo" placeholder="Add a new task" />
+      <input
+        class="todo-input"
+        type="text"
+        v-model="newTodo"
+        placeholder="Add a new task"
+      />
       <button class="add-btn" :disabled="isNewTodoEmpty">Add Todo</button>
     </form>
     <ul class="todo-list">
@@ -16,7 +21,7 @@
           <ph-circle v-if="!todo.isCompleted" :size="16" color="#f98525" />
           <ph-check v-else :size="16" color="#f98525" />
         </button>
-        <div>
+        <div class="todo">
           <p
             v-if="!todo.isEditing"
             :class="{ completed: todo.isCompleted }"
@@ -123,60 +128,3 @@ import {
   PhTrash,
 } from "@phosphor-icons/vue";
 </script>
-
-<!-- <style>
-.todo-app {
-  text-align: center;
-}
-
-.title {
-  margin-bottom: 15px;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.add-btn {
-  margin-left: 5px;
-}
-
-.edit-btn {
-  margin-left: 5px;
-}
-
-.delete-btn {
-  margin-right: 5px;
-  margin-left: 20px;
-}
-
-.input-container {
-  margin-top: 20px;
-}
-
-.todo-item {
-  margin-bottom: 10px;
-}
-
-.has-line-through {
-  text-decoration: line-through;
-}
-
-.empty-message {
-  margin-top: 10px;
-  color: #888;
-}
-</style> -->
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
