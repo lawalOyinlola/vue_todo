@@ -78,32 +78,18 @@
 
             <ph-check v-else :size="20" color="#f98525">
               <animate
+                attributeName="opacity"
                 values="0.7;1;0.7"
+                dur="4s"
+                repeatCount="indefinite"
+              />
+            </ph-check>
           </button>
+          <button
             v-if="!todo.isEditing"
-            :class="{ completed: todo.isCompleted }"
-            class="todo-name"
             class="delete-btn"
+            @click="deleteTodo(todo)"
           >
-            {{ todo.name }}
-          </p>
-          <input
-            v-else
-            class="edit-input"
-            type="text"
-            v-model="todo.name"
-            @blur="updateTodo(todo)"
-            @keyup.enter="updateTodo(todo)"
-          />
-        </div>
-        <button
-          v-if="!todo.isCompleted"
-          class="edit-btn"
-          @click="toggleEdit(todo)"
-        >
-          <ph-pencil-simple-line
-            v-if="!todo.isEditing && !todo.isCompleted"
-            :size="20"
             <ph-trash :size="20" color="red">
               <animate
                 attributeName="opacity"
