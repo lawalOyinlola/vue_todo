@@ -22,8 +22,8 @@
     <ul class="todo-list">
       <button
         :class="['delete-all-btn', { hidden: !hasTodos }]"
-        @dblclick="deleteAllTodos"
-        title="Double click to clear task"
+        @click="deleteAllTodos"
+        title="Clear all tasks?"
       >
         Delete All
       </button>
