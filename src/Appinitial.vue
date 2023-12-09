@@ -27,63 +27,26 @@
       >
         Delete All
       </button>
-      <transition-group name="fade" tag="div">
-        <li v-for="(todo, index) in activeTodos" :key="index" class="todo-item">
-          <button
-            v-if="!todo.isCompleted"
-            class="checkbox-btn"
-            @click="toggleTodoStatus(todo)"
-            title="Mark as complete"
-          ></button>
-          <button
-            v-else
-            class="checkbox-btn"
-            @click="toggleTodoStatus(todo)"
-            title="Mark as not complete"
-          >
-            <ph-check :size="12" color="#234e70" weight="bold" />
-          </button>
-          <div class="todo">
-            <p
-              v-if="!todo.isEditing"
-              :class="['todo-name', { completed: todo.isCompleted }]"
-            >
-              {{ todo.name }}
-            </p>
-            <input
-              v-else
-              class="edit-input"
-              type="text"
-              v-model="todo.name"
-              @blur="updateTodo(todo)"
-              @keyup.enter="updateTodo(todo)"
-            />
-          </div>
-          <button
-            :class="['edit-btn', { hidden: todo.isCompleted }]"
-            @click="toggleEdit(todo)"
-          >
-            <ph-pencil-simple-line
-              v-if="!todo.isEditing"
-              :size="20"
-              color="#f98525"
-            >
-              <animate
-                attributeName="opacity"
-                values="0.7;1;0.7"
-                dur="4s"
-                repeatCount="indefinite"
-              />
-            </ph-pencil-simple-line>
-
-            <ph-check v-else :size="20" color="#f98525">
-              <animate
-                values="0.7;1;0.7"
-          </button>
+      <li v-for="(todo, index) in activeTodos" :key="index" class="todo-item">
+        <button
+          v-if="!todo.isCompleted"
+          class="checkbox-btn"
+          @click="toggleTodoStatus(todo)"
+          title="Mark as complete"
+        ></button>
+        <button
+          v-else
+          class="checkbox-btn"
+          @click="toggleTodoStatus(todo)"
+          title="Mark as not complete"
+        >
+          <ph-check :size="12" color="#234e70" weight="bold" />
+        </button>
+        <div class="todo">
+          <p
+            contenteditable="false"
             v-if="!todo.isEditing"
-            :class="{ completed: todo.isCompleted }"
-            class="todo-name"
-            class="delete-btn"
+            :class="['todo-name', { completed: todo.isCompleted }]"
           >
             {{ todo.name }}
           </p>
@@ -97,32 +60,27 @@
           />
         </div>
         <button
-          v-if="!todo.isCompleted"
-          class="edit-btn"
+          :class="['edit-btn', { hidden: todo.isCompleted }]"
           @click="toggleEdit(todo)"
         >
           <ph-pencil-simple-line
-            v-if="!todo.isEditing && !todo.isCompleted"
+            v-if="!todo.isEditing"
             :size="20"
-            <ph-trash :size="20" color="red">
-              <animate
-                attributeName="opacity"
-                values="0.7;1;0.7"
-                dur="4s"
-                repeatCount="indefinite"
-            /></ph-trash>
-          </button>
-          <button v-else @click="cancelEdit(todo)">
-            <ph-prohibit :size="20" color="red">
-              <animate
-                attributeName="opacity"
-                values="0.7;1;0.7"
-                dur="4s"
-                repeatCount="indefinite"
-            /></ph-prohibit>
-          </button>
-        </li>
-      </transition-group>
+            color="#f98525"
+          />
+          <ph-check v-else :size="20" color="#f98525" />
+        </button>
+        <button
+          v-if="!todo.isEditing"
+          class="delete-btn"
+          @click="deleteTodo(todo)"
+        >
+          <ph-trash :size="20" color="red" />
+        </button>
+        <button v-else @click="cancelEdit(todo)">
+          <ph-prohibit :size="20" color="red" />
+        </button>
+      </li>
     </ul>
 
     <footer>
@@ -136,17 +94,6 @@
     </footer>
   </div>
 </template>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
 
 <script>
 export default {
@@ -183,14 +130,6 @@ export default {
     },
   },
   methods: {
-    saveTodosToLocalStorage() {
-      localStorage.setItem("todos", JSON.stringify(this.todos));
-    },
-    getTodosFromLocalStorage() {
-      const todos = localStorage.getItem("todos");
-      return todos ? JSON.parse(todos) : [];
-    },
-
     addTodo() {
       if (!this.isNewTodoEmpty) {
         const id = this.todos.length + 1;
@@ -203,22 +142,19 @@ export default {
         };
         this.todos.unshift(todo);
         this.newTodo = "";
-        this.saveTodosToLocalStorage();
       }
     },
     deleteAllTodos() {
       this.todos = [];
-      this.saveTodosToLocalStorage();
     },
     deleteTodo(todo) {
       todo.deleted = true;
-      this.saveTodosToLocalStorage();
     },
     toggleTodoStatus(todo) {
       todo.isCompleted = !todo.isCompleted;
-      this.saveTodosToLocalStorage();
     },
     toggleEdit(todo) {
+      // todo.initialValue = todo.name;
       todo.isEditing = !todo.isEditing;
     },
 
@@ -228,17 +164,12 @@ export default {
 
       if (index !== -1) {
         this.$set(this.todos, index, todo);
-        this.saveTodosToLocalStorage();
       }
     },
 
     cancelEdit(todo) {
       todo.isEditing = false;
-      return todo.name;
     },
-  },
-  created() {
-    this.todos = this.getTodosFromLocalStorage();
   },
 };
 </script>
