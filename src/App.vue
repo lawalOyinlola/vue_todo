@@ -13,21 +13,35 @@
         v-model="newTodo"
         placeholder="Add a new task"
       />
-      <button class="add-btn" :disabled="isNewTodoEmpty">Add Todo</button>
+      <button class="add-btn" :disabled="isNewTodoEmpty" title="Add a new task">
+        Add Todo
+      </button>
     </form>
     <ul class="todo-list">
-      <button class="delete-all-btn" v-if="hasTodos" @click="deleteAllTodos">
+      <button
+        class="delete-all-btn"
+        v-if="hasTodos"
+        @dblclick="deleteAllTodos"
+        title="Double click to clear task"
+      >
         Delete All
       </button>
       <li v-for="(todo, index) in activeTodos" :key="index" class="todo-item">
-        <button class="checkbox-btn" @click="toggleTodoStatus(todo)">
-          <ph-radio-button
-            v-if="!todo.isCompleted"
-            :size="16"
-            color="#f98525"
-            weight="bold"
-          />
-          <ph-check v-else :size="16" color="#f98525" weight="bold" />
+        <button
+          v-if="!todo.isCompleted"
+          class="checkbox-btn"
+          @click="toggleTodoStatus(todo)"
+          title="Mark as complete"
+        >
+          <ph-radio-button :size="20" color="#234e70" weight="bold" />
+        </button>
+        <button
+          v-else
+          class="checkbox-btn"
+          @click="toggleTodoStatus(todo)"
+          title="Mark as not complete"
+        >
+          <ph-check :size="20" color="#234e70" weight="bold" />
         </button>
         <div class="todo">
           <p
@@ -53,13 +67,13 @@
         >
           <ph-pencil-simple-line
             v-if="!todo.isEditing && !todo.isCompleted"
-            :size="16"
+            :size="20"
             color="#f98525"
           />
-          <ph-file-plus v-else-if="todo.isEditing" :size="16" color="#f98525" />
+          <ph-file-plus v-else-if="todo.isEditing" :size="20" color="#f98525" />
         </button>
         <button class="delete-btn" @click="deleteTodo(todo)">
-          <ph-trash :size="16" color="red" />
+          <ph-trash :size="20" color="red" />
         </button>
       </li>
     </ul>
@@ -117,6 +131,9 @@ export default {
     },
     toggleTodoStatus(todo) {
       todo.isCompleted = !todo.isCompleted;
+      if (todo.isCompleted) {
+        todo.isEditing = false;
+      }
     },
     toggleEdit(todo) {
       todo.isEditing = !todo.isEditing;

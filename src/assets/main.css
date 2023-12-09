@@ -7,6 +7,7 @@
 }
 
 html {
+  /* 1rem = 10px(62.5%) */
   font-size: 62.5%;
 }
 
@@ -114,7 +115,7 @@ header {
   border-bottom: 2px solid #234e70;
   border-radius: 4px;
   margin: 0 0.4rem;
-  padding: 1rem;
+  padding: 0.5rem;
   display: grid;
   grid-template-columns: auto 1fr auto auto;
   align-items: center;
@@ -143,8 +144,13 @@ header {
 }
 
 .edit-input {
+  width: 100%;
   border: none;
+  color: red;
+  color: #dc2222;
   background-color: inherit;
+  padding: 0.4rem;
+  padding-left: 0;
 }
 
 footer {
@@ -156,17 +162,6 @@ footer {
   position: fixed;
   bottom: 0;
 }
-
-/* button {
-  background-color: #e0e0e0;
-  border: 1px solid #e0e0e0;
-  padding: 0.5rem;
-} */
-
-/* p {
-  font-size: 0.7rem;
-  color: #a19e9e;
-} */
 
 @media (max-width: 75em) {
   html {
